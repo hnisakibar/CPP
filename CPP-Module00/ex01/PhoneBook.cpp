@@ -25,6 +25,19 @@ PhoneBook::~PhoneBook(void)
 {
 }
 
+static std::string trim(const std::string &s)
+{
+    std::string::size_type start = 0;
+    while (start < s.size() && std::isspace(s[start]))
+        ++start;
+
+    std::string::size_type end = s.size();
+    while (end > start && std::isspace(s[end - 1]))
+        --end;
+
+    return s.substr(start, end - start);
+}
+
 bool	PhoneBook::readNonEmptyField(const std::string &label, std::string &value)
 {
 	while (true)
@@ -32,6 +45,7 @@ bool	PhoneBook::readNonEmptyField(const std::string &label, std::string &value)
 		std::cout << label;
 		if (!std::getline(std::cin, value))
 			return (false);
+		value = trim(value);
 		if (!value.empty())
 			return (true);
 		std::cout << "This field cannot be empty." << '\n';
@@ -47,25 +61,11 @@ std::string	PhoneBook::formatColumn(const std::string &value)
 
 bool	PhoneBook::isValidIndex(const std::string &input, int &index) const
 {
-	long	value;
-	int		digit;
+    if (input.length() != 1 || input[0] < '0' || input[0] > '7')
+        return false;
 
-	if (input.empty())
-		return (false);
-	value = 0;
-	for (std::string::size_type i = 0; i < input.length(); i++)
-	{
-		if (!std::isdigit(static_cast<unsigned char>(input[i])))
-			return (false);
-		digit = input[i] - '0';
-		if (value > (LONG_MAX - digit) / 10)
-			return (false);
-		value = (value * 10) + digit;
-		if (value > INT_MAX)
-			return (false);
-	}
-	index = static_cast<int>(value);
-	return (true);
+    index = input[0] - '0';
+    return (index < _count);
 }
 
 void	PhoneBook::printContactRow(int index) const
@@ -133,13 +133,16 @@ void	PhoneBook::searchContact(void) const
 		<< std::setw(10) << "Nickname" << '\n';
 	for (int i = 0; i < _count; i++)
 		printContactRow(i);
-	std::cout << "Index to display: ";
-	if (!std::getline(std::cin, input))
-		return ;
-	if (!isValidIndex(input, index) || index < 0 || index >= _count)
+	while (true)
 	{
-		std::cout << "Invalid index." << '\n';
-		return ;
+    	std::cout << "Index to display: ";
+    	if (!std::getline(std::cin, input))
+    	    return;
+
+    	if (isValidIndex(input, index))
+    	    break;
+
+    	std::cout << "Invalid index." << '\n';
 	}
 	printContactDetails(index);
 }

@@ -22,7 +22,7 @@ int	main(void)
 
 	while (true)
 	{
-		std::cout << "Enter command (ADD, SEARCH, EXIT): ";
+		std::cout << "Enter command <ADD> or <SEARCH> or <EXIT>: ";
 		if (!std::getline(std::cin, command))
 			break ;
 		if (command == "ADD")
