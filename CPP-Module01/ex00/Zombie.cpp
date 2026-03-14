@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Zombie.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hakibar <hakibar@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/13 18:52:51 by hakibar           #+#    #+#             */
+/*   Updated: 2026/03/14 00:24:24 by hakibar          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Zombie.hpp"
 #include <iostream>
 
@@ -22,15 +34,4 @@ void	Zombie::setName(const std::string &name)
 void	Zombie::announce(void) const
 {
 	std::cout << _name << ": BraiiiiiiinnnzzzZ..." << '\n';
-}
-
-Zombie	*newZombie(std::string name)
-{
-	return (new Zombie(name));
-}
-
-void	randomChump(std::string name)
-{
-	Zombie	zombie(name);
-	zombie.announce();
 }
